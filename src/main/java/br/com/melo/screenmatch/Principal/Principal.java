@@ -83,7 +83,21 @@ public class Principal {
         episodios.stream()
                 .filter(e -> e.getDataLancamento() != null && e.getDataLancamento().isAfter(dataBusca))
                 .forEach(e -> System.out.println("Temporada :" + e.getTemporada() +
-                            ", Episódio: " + e.getTitulo() +
-                            ", Data de Lançamento: " + e.getDataLancamento().format(formatter)));
+                        ", Episódio: " + e.getTitulo() +
+                        ", Data de Lançamento: " + e.getDataLancamento().format(formatter)));
+
+        Map<Integer, Double> avaliaMap = episodios.stream()
+                .filter(e -> e.getAvaliacao() > 0.0)
+                .collect(Collectors.groupingBy(Episodio::getTemporada, Collectors.averagingDouble(Episodio::getAvaliacao)));
+
+        System.out.println(avaliaMap);
+
+
+        //Lidando com estatisticas
+        DoubleSummaryStatistics est = episodios.stream()
+                .filter(e->e.getAvaliacao()>0.0)
+                .collect(Collectors.summarizingDouble(Episodio::getAvaliacao));
+
+        System.out.println(est);
     }
 }
